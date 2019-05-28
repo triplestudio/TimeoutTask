@@ -33,5 +33,9 @@ namespace TS.Task
         public long ExecuteSecondTicks { get; set; }
         // 超时回调方法
         public TimeoutCallback<T> Callback { get; set; }
+        /// <summary>
+        /// 用于保存一些回调时使用的上下文信息
+        /// </summary>
+        public String Context { get; set; }
     }
 }
