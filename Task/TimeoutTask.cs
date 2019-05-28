@@ -10,7 +10,8 @@ namespace TS.Task
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="objectKey"></param>
-    public delegate void TimeoutCallback<T>(T objectKey);
+    /// <param name="context"></param>
+    public delegate void TimeoutCallback<T>(T objectKey, String context);
 
     /// <summary>
     /// 超时任务信息
