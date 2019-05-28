@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -105,7 +105,7 @@ namespace TS.Task
                 // 存在超时任务执行其回调
                 if (task != null)
                 {
-                    task.Callback(task.ObjectKey);
+                    task.Callback(task.ObjectKey, task.Context);
                 }
                 else
                 {
@@ -128,14 +128,20 @@ namespace TS.Task
 
         #region 以下为向外开放的功能
 
+        public long AddTimeoutTask(T objectKey, int timeoutSeconds, TimeoutCallback<T> callback)
+        {
+            return AddTimeoutTask(objectKey, timeoutSeconds, callback, null);
+        }
+
         /// <summary>
         /// 指定对象标识，超时时长（秒为单位），超时执行回调，加入到超时检测字典中
         /// </summary>
         /// <param name="objectKey"></param>
         /// <param name="timeoutSeconds"></param>
         /// <param name="callback"></param>
+        /// <param name="context"></param>
         /// <returns></returns>
-        public long AddTimeoutTask(T objectKey, int timeoutSeconds, TimeoutCallback<T> callback)
+        public long AddTimeoutTask(T objectKey, int timeoutSeconds, TimeoutCallback<T> callback, String context)
         {
             TimeoutTask<T> task = new TimeoutTask<T>();
             task.ObjectKey = objectKey;
@@ -144,6 +150,7 @@ namespace TS.Task
             long taskId = GetNextTaskId();
             task.TaskId = taskId;
             task.ExecuteSecondTicks = DateTime.Now.Ticks / 10000000 + timeoutSeconds;
+            task.Context = context;
 
             lock (_DictionaryLocker)
             {
@@ -209,7 +216,8 @@ namespace TS.Task
         {
             Debug.WriteLine("timeout task runner is destoried.");
             _Working = false;
-            _TaskRunThread.Join();
+            _WaitHandle.Set();
+            _TaskRunThread.Join(100);
             _WaitHandle.Close();
         }
 
