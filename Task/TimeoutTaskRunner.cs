@@ -214,7 +214,6 @@ namespace TS.Task
         /// </summary>
         public void Dispose()
         {
-            Debug.WriteLine("timeout task runner is destoried.");
             _Working = false;
             _WaitHandle.Set();
             _TaskRunThread.Join(100);
