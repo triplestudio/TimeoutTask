@@ -40,6 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Task\QueueTask.cs" />
+    <Compile Include="Task\QueueTaskRunner.cs" />
     <Compile Include="Task\TimeoutTask.cs" />
     <Compile Include="Task\TimeoutTaskRunner.cs" />
   </ItemGroup>
